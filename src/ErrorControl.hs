@@ -31,11 +31,22 @@ missingSymbols group
   | group 'a' = "Empty set of terminals on the line no. 2."
   | otherwise = "Empty set of productions on the line no. 4."
 
+invalidStartSymbol :: String
+invalidStartSymbol = errMsgGrammar ++ "The start symbol must be included between variables."
+
 exitWithErrMsg :: ExitCode -> String -> IO a
 exitWithErrMsg errCode errMsg = hPutStrLn stderr errMsg >> exitWith errCode
 
 printWarning :: String -> IO ()
 printWarning = hPutStrLn stderr
+
+invalidProductionsErrMsg :: [(Int, (String, String))] -> String
+invalidProductionsErrMsg errTuples =
+  baseErrMsg ++
+  "   Invalid format of productions no.: " ++
+  show (map (\(x, (y, z)) -> show (x + 4) ++ ". line: " ++ y ++ "->" ++ z) errTuples)
+  where
+    baseErrMsg = errMsgGrammar ++ productionsWrongFormat
 
 productionErrMsg :: [(Int, Int)] -> [(Int, String)] -> Int -> String
 productionErrMsg errIndices errTuples errCode

@@ -10,5 +10,5 @@ main = do
   putStrLn $ "Flags: " ++ show args
   putStrLn $ "Files: " ++ show files
   grammar <- parseInput $ head files
-  print grammar
+  validateGrammar grammar
   putStrLn "END OF PROGRAM "
