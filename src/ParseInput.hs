@@ -18,23 +18,27 @@ data Grammar =
     }
   deriving (Show)
 
+parseInput :: String -> IO ()
 parseInput file = do
   grammar <-
     if file == "-"
       then getContents
       else readFile file
   when (null (lines grammar)) $ exitWithErrMsg (ExitFailure 1) missingContent
-  variables <-
-    validateSymbols isAsciiUpper $ filter (/= "") $ map strip $ splitBy ',' $ head $ lines grammar
-  terminals <-
-    validateSymbols isAsciiLower $ filter (/= "") $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
-  startSymbol <- validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
-  productions <- validateProductions $ filter (/= "") $ map strip $ drop 3 $ lines grammar
-  putStrLn $ "Variables: " ++ show variables
-  putStrLn $ "Terminals: " ++ show terminals
-  putStrLn $ "startSymbol: " ++ head startSymbol
-  putStrLn $ "productions: " ++ show productions
+--  return Grammar {
+--  variables =
+--    validateSymbols isAsciiUpper $ filter (/= "") $ map strip $ splitBy ',' $ head $ lines grammar,
+--  terminals =
+--    validateSymbols isAsciiLower $ filter (/= "") $ map strip $ splitBy ',' $ (!! 1) $ lines grammar,
+--  startSymbol = validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)],
+--  productions = validateProductions $ filter (/= "") $ map strip $ drop 3 $ lines grammar
+--  }
+--  putStrLn $ "Variables: " ++ show variables
+--  putStrLn $ "Terminals: " ++ show terminals
+--  putStrLn $ "startSymbol: " ++ head startSymbol
+--  putStrLn $ "productions: " ++ show productions
 
+validateSymbols :: (Char -> Bool) -> [String] -> IO [String]
 validateSymbols symbolGroup symbols = do
   when
     (symbolTuples /= [])
@@ -49,6 +53,7 @@ validateSymbols symbolGroup symbols = do
     wrongSymbols =
       (symbols \\ filter (all symbolGroup) symbols) `union` filter ((> 1) . length) symbols
 
+validateProductions :: [String] -> IO [(String, String)]
 validateProductions productions = do
   when (errArrowIndices /= []) $
     exitWithErrMsg

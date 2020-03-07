@@ -30,7 +30,7 @@ missingSymbols group
   | group 'A' = "Empty set of variables on the line no. 1."
   | group 'a' = "Empty set of terminals on the line no. 2."
   | otherwise = "Empty set of productions on the line no. 4."
- 
+
 exitWithErrMsg :: ExitCode -> String -> IO a
 exitWithErrMsg errCode errMsg = hPutStrLn stderr errMsg >> exitWith errCode
 
@@ -55,6 +55,7 @@ productionErrMsg errIndices errTuples errCode
   where
     baseErrMsg = errMsgGrammar ++ productionsWrongFormat
 
+symbolErrMsg :: (Show a1, Show a2) => Bool -> [(String, a2)] -> a1 -> (Char -> Bool) -> String
 symbolErrMsg isRange multipleSymbols wrongSymbols symbolGroup =
   errMsgGrammar ++
   if symbolGroup 'A'

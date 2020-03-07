@@ -27,6 +27,7 @@ getInvalidLeftSides vars = zip (findIndices (`elem` invalidLeftSides) vars) inva
   where
     invalidLeftSides = vars \\ filter (all isAsciiUpper) vars `union` filter (all isSpace) vars
 
+getValidatedRightSides :: [String] -> [Bool]
 getValidatedRightSides = map (all isValidRightSide)
   where
     isAsciiAlpha ch = (||) (isAsciiUpper ch) (isAsciiLower ch)
@@ -36,6 +37,7 @@ containsInvalidSymbols :: [String] -> Bool
 containsInvalidSymbols symbols =
   (||) (not $ all (== True) $ getValidatedRightSides symbols) ("" `elem` symbols)
 
+getInvalidRightSides :: [String] -> [(Int, String)]
 getInvalidRightSides symbols =
   map
     (\idx -> (idx, (!!) symbols idx))
