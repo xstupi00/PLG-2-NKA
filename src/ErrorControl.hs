@@ -4,6 +4,9 @@ import Data.List
 import System.Exit
 import System.IO
 
+missingContent :: String
+missingContent = "Missing content of given input."
+
 errMsgGrammar :: String
 errMsgGrammar = "Wrong format of input grammar: \n "
 
@@ -22,6 +25,12 @@ termErrMsgOccur = "Terminals should not be entered twice in the input list: "
 productionsWrongFormat :: String
 productionsWrongFormat = "Productions have not required format: \n"
 
+missingSymbols :: (Char -> Bool) -> String
+missingSymbols group
+  | group 'A' = "Empty set of variables on the line no. 1."
+  | group 'a' = "Empty set of terminals on the line no. 2."
+  | otherwise = "Empty set of productions on the line no. 4."
+ 
 exitWithErrMsg :: ExitCode -> String -> IO a
 exitWithErrMsg errCode errMsg = hPutStrLn stderr errMsg >> exitWith errCode
 

@@ -14,7 +14,7 @@ data Grammar =
     { variables :: [String] -- V
     , terminals :: [String] -- T
     , startSymbol :: Char -- S
-    , productions :: [(Char, String)] -- P
+    , productions :: [(String, String)] -- P
     }
   deriving (Show)
 
@@ -23,10 +23,11 @@ parseInput file = do
     if file == "-"
       then getContents
       else readFile file
+  when (null (lines grammar)) $ exitWithErrMsg (ExitFailure 1) missingContent
   variables <- validateSymbols isAsciiUpper $ map strip $ splitBy ',' $ head $ lines grammar
   terminals <- validateSymbols isAsciiLower $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
   startSymbol <- validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
-  productions <- validateProductions $ map strip $ drop 3 $ lines grammar
+  productions <- validateProductions $ filter (/="") $ map strip $ drop 3 $ lines grammar
   putStrLn $ "Variables: " ++ show variables
   putStrLn $ "Terminals: " ++ show terminals
   putStrLn $ "startSymbol: " ++ head startSymbol
@@ -39,6 +40,7 @@ validateSymbols symbolGroup symbols = do
   when
     (containsInvalidSymbol symbolGroup symbols || isNotGrammarSymbol symbols)
     (exitWithErrMsg (ExitFailure 1) $ symbolErrMsg True symbolTuples wrongSymbols symbolGroup)
+  when (null $ nub symbols) $ exitWithErrMsg (ExitFailure 1) (missingSymbols symbolGroup) 
   return $ nub symbols
   where
     symbolTuples = filter ((> 1) . snd) . map (\l@(x:xs) -> (x, length l)) . group . sort $ symbols
@@ -61,6 +63,7 @@ validateProductions productions = do
     (exitWithErrMsg
        (ExitFailure 1)
        (productionErrMsg invalidLeftSides (getInvalidRightSides rightSide') 2))
+  when (null $ zip leftSide rightSide') $ exitWithErrMsg (ExitFailure 1) (missingSymbols isSpace)
   return $ zip leftSide rightSide'
   where
     splittedProductions = map (span (/= '-') . strip) productions

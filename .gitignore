@@ -2,5 +2,5 @@
 flp-project.cabal
 *~
 .idea/
-.*hi
+*.hi
 *.o

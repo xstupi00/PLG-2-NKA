@@ -4,6 +4,7 @@ import Data.Char
 import Data.Function
 import Data.List
 import Data.Maybe
+import Data.Foldable (Foldable)
 
 strip :: String -> String
 strip = dropWhile isSpace . reverse . dropWhile isSpace . reverse

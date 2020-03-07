@@ -1,7 +1,7 @@
-A,B
+A, B, C
 a,b,c
 A
-A->DD
+A->AA
 A->ccB
 B->bB
 B->##
