@@ -30,8 +30,10 @@ getInvalidLeftSides vars = zip (findIndices (`elem` invalidLeftSides) vars) inva
 getValidatedRightSides :: [String] -> [Bool]
 getValidatedRightSides = map (all isValidRightSide)
   where
-    isAsciiAlpha ch = (||) (isAsciiUpper ch) (isAsciiLower ch)
     isValidRightSide ch = (||) (isAsciiAlpha ch) (ch == '#')
+
+isAsciiAlpha :: Char -> Bool
+isAsciiAlpha ch = (||) (isAsciiUpper ch) (isAsciiLower ch)
 
 containsInvalidSymbols :: [String] -> Bool
 containsInvalidSymbols symbols =
@@ -42,3 +44,9 @@ getInvalidRightSides symbols =
   map
     (\idx -> (idx, (!!) symbols idx))
     (elemIndices False (getValidatedRightSides symbols) `union` elemIndices "" symbols)
+    
+remove :: String -> String -> String
+remove w "" = ""
+remove w s@(c:cs) 
+  | w `isPrefixOf` s = remove w (drop (length w) s)
+  | otherwise = c : remove w cs

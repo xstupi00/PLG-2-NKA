@@ -1,6 +1,8 @@
 module ParseInput where
 
 import ErrorControl
+import Grammar
+import GrammarControl
 import Helpers
 import ParseArgs
 
@@ -9,34 +11,26 @@ import Data.Char
 import Data.List
 import System.Exit
 
-data Grammar =
-  Grammar -- G = (V, T, S, P)
-    { variables :: [String] -- V
-    , terminals :: [String] -- T
-    , startSymbol :: String -- S
-    , productions :: [(String, String)] -- P
-    }
-  deriving (Show)
-
-parseInput :: String -> IO ()
+parseInput :: String -> IO Grammar
 parseInput file = do
   grammar <-
     if file == "-"
       then getContents
       else readFile file
   when (null (lines grammar)) $ exitWithErrMsg (ExitFailure 1) missingContent
---  return Grammar {
---  variables =
---    validateSymbols isAsciiUpper $ filter (/= "") $ map strip $ splitBy ',' $ head $ lines grammar,
---  terminals =
---    validateSymbols isAsciiLower $ filter (/= "") $ map strip $ splitBy ',' $ (!! 1) $ lines grammar,
---  startSymbol = validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)],
---  productions = validateProductions $ filter (/= "") $ map strip $ drop 3 $ lines grammar
---  }
---  putStrLn $ "Variables: " ++ show variables
---  putStrLn $ "Terminals: " ++ show terminals
---  putStrLn $ "startSymbol: " ++ head startSymbol
---  putStrLn $ "productions: " ++ show productions
+  variables <-
+    validateSymbols isAsciiUpper $ filter (/= "") $ map strip $ splitBy ',' $ head $ lines grammar
+  terminals <-
+    validateSymbols isAsciiLower $ filter (/= "") $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
+  startSymbol <- validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
+  productions <- validateProductions $ filter (/= "") $ map strip $ drop 3 $ lines grammar
+  return
+    Grammar
+      { variables = variables
+      , terminals = terminals
+      , startSymbol = head startSymbol
+      , productions = removeEpsilon productions
+      }
 
 validateSymbols :: (Char -> Bool) -> [String] -> IO [String]
 validateSymbols symbolGroup symbols = do
