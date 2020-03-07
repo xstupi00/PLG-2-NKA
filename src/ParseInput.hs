@@ -23,16 +23,16 @@ parseInput file = do
     if file == "-"
       then getContents
       else readFile file
-  variables <- validSymbols isAsciiUpper $ map strip $ splitBy ',' $ head $ lines grammar
-  terminals <- validSymbols isAsciiLower $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
-  startSymbol <- validSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
-  productions <- validProductions $ drop 3 $ lines grammar
+  variables <- validateSymbols isAsciiUpper $ map strip $ splitBy ',' $ head $ lines grammar
+  terminals <- validateSymbols isAsciiLower $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
+  startSymbol <- validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
+  productions <- validateProductions $ map strip $ drop 3 $ lines grammar
   putStrLn $ "Variables: " ++ show variables
   putStrLn $ "Terminals: " ++ show terminals
   putStrLn $ "startSymbol: " ++ head startSymbol
   putStrLn $ "productions: " ++ show productions
 
-validSymbols symbolGroup symbols = do
+validateSymbols symbolGroup symbols = do
   when
     (symbolTuples /= [])
     (printWarning $ symbolErrMsg False symbolTuples wrongSymbols symbolGroup)
@@ -45,23 +45,27 @@ validSymbols symbolGroup symbols = do
     wrongSymbols =
       (symbols \\ filter (all symbolGroup) symbols) `union` filter ((> 1) . length) symbols
 
-validProductions productions = do
-  when (getInvalidIndices productions /= []) $
+validateProductions productions = do
+  when (errArrowIndices /= []) $
     exitWithErrMsg
       (ExitFailure 1)
-      (productionErrMsg (getInvalidArrows productions) (getInvalidLeftSides leftSide) 0)
+      (productionErrMsg invalidLeftSides (getInvalidRightSides rightSide) 0)
+  let rightSide' = map (strip . snd . splitAt 2) rightSide
   when
     (containsInvalidSymbol isAsciiUpper leftSide) -- || isNotGrammarSymbol rightSide
     (exitWithErrMsg
        (ExitFailure 1)
-       (productionErrMsg (getInvalidArrows productions) (getInvalidLeftSides leftSide) 1))
+       (productionErrMsg invalidLeftSides (getInvalidLeftSides leftSide) 1))
   when
-    (containsInvalidSymbols rightSide)
+    (containsInvalidSymbols rightSide')
     (exitWithErrMsg
        (ExitFailure 1)
-       (productionErrMsg (getInvalidArrows productions) (getInvalidRightSides rightSide) 2))
-  return parsedProductions
+       (productionErrMsg invalidLeftSides (getInvalidRightSides rightSide') 2))
+  return $ zip leftSide rightSide'
   where
-    parsedProductions = map (splitAt 1 . delete '-' . delete '>') productions
-    leftSide = map fst parsedProductions
-    rightSide = map snd parsedProductions
+    splittedProductions = map (span (/= '-') . strip) productions
+    leftSide = map (strip . fst) splittedProductions
+    rightSide = map (strip . snd) splittedProductions
+    arrowIndices = map (findString "->") rightSide
+    errArrowIndices = [0 .. genericLength productions - 1] \\ elemIndices 0 arrowIndices
+    invalidLeftSides = zip errArrowIndices (filter (/= 0) arrowIndices)
