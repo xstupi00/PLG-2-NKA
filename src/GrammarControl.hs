@@ -45,23 +45,29 @@ missingRuleWithStartSymbol grammar =
 filterProductions :: Grammar -> [(String, String)]
 filterProductions grammar =
   products \\
-  (epsilonProductions `union` simpleProductions `union` terminalProductions `union` rightProductions)
+  (epsilonProductions `union` basicProductions `union` terminalProductions `union` 
+  rightProductions `union` simpleProductions)
   where
     epsilonProductions = filterEpsilonProductions products vars terms
-    simpleProductions = filterSimpleProductions products vars terms
+    basicProductions = filterBasicProductions products vars terms
     terminalProductions = filterTerminalProductions products vars terms
     rightProductions = filterRightProductions products vars terms
+    simpleProductions = filterSimpleProductions products vars terms
     products = productions' grammar
     vars = variables' grammar
     terms = terminals' grammar
+
+filterSimpleProductions :: (Foldable t, Eq a) => [([a], [a])] -> t [a] -> p -> [([a], [a])]
+filterSimpleProductions products vars terms = 
+  filter (\(l, r) -> l `elem` vars && length r == 1 && [head r] `elem` vars) products
 
 filterEpsilonProductions :: (Foldable t, Eq a) => [(a, String)] -> t a -> p -> [(a, String)]
 filterEpsilonProductions products vars terms =
   filter (\(l, r) -> l `elem` vars && length r == 1 && head r == '#') products
 
-filterSimpleProductions ::
+filterBasicProductions ::
      (Eq a, Foldable t1, Foldable t2) => [([a], [a])] -> t1 [a] -> t2 [a] -> [([a], [a])]
-filterSimpleProductions products vars terms =
+filterBasicProductions products vars terms =
   filter
     (\(l, r) -> l `elem` vars && length r == 2 && [head r] `elem` terms && [last r] `elem` vars)
     products
