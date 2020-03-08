@@ -12,15 +12,3 @@ data Grammar =
     , productions :: [(String, String)] -- P
     }
   deriving (Show)
-  
-variables' :: Grammar -> [String] 
-variables' (Grammar variables _ _ _) = variables
-
-terminals' :: Grammar -> [String] 
-terminals' (Grammar _ terminals _ _) = terminals
-
-startSymbol' :: Grammar -> String 
-startSymbol' (Grammar _ _ startSymbol _) = startSymbol
-
-productions' :: Grammar -> [(String, String)] 
-productions' (Grammar _ _ _ productions) = productions

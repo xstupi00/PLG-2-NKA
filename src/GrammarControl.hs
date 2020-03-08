@@ -31,16 +31,16 @@ validateGrammar grammar = do
     invalidProductionsCodes = map (analyseInvalidProductions grammar) invalidProductions
     invalidProductionsTuple =
       zip3
-        (findIndices (`elem` invalidProductions) (productions' grammar))
+        (findIndices (`elem` invalidProductions) (productions grammar))
         invalidProductions
         invalidProductionsCodes
 
 missingStartSymbol :: Grammar -> Bool
-missingStartSymbol grammar = startSymbol' grammar `notElem` variables' grammar
+missingStartSymbol grammar = startSymbol grammar `notElem` variables grammar
 
 missingRuleWithStartSymbol :: Grammar -> Bool
 missingRuleWithStartSymbol grammar =
-  not (any (\(x, _) -> x == startSymbol' grammar) (productions' grammar))
+  not (any (\(x, _) -> x == startSymbol grammar) (productions grammar))
 
 filterProductions :: Grammar -> [(String, String)]
 filterProductions grammar =
@@ -53,9 +53,9 @@ filterProductions grammar =
     terminalProductions = filterTerminalProductions products vars terms
     rightProductions = filterRightProductions products vars terms
     simpleProductions = filterSimpleProductions products vars terms
-    products = productions' grammar
-    vars = variables' grammar
-    terms = terminals' grammar
+    products = productions grammar
+    vars = variables grammar
+    terms = terminals grammar
 
 filterSimpleProductions :: (Foldable t, Eq a) => [([a], [a])] -> t [a] -> p -> [([a], [a])]
 filterSimpleProductions products vars terms = 
@@ -86,7 +86,7 @@ filterRightProductions ::
 filterRightProductions products vars terms =
   filter
     (\(l, r) ->
-       l `elem` vars &&
+       l `elem` vars && length r > 2 &&
        all (\ch -> [ch] `elem` terms) (fst $ splitAt (length r - 1) r) && [last r] `elem` vars)
     products
 
@@ -99,5 +99,5 @@ analyseInvalidProductions grammar (left, right)
     (2, filter (\ch -> [ch] `notElem` terms) (filter isAsciiLower right))
   | otherwise = (-1, "")
   where
-    vars = variables' grammar
-    terms = terminals' grammar
+    vars = variables grammar
+    terms = terminals grammar
