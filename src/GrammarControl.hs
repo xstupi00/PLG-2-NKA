@@ -21,7 +21,8 @@ removeEpsilon = map removeEpsilon'
 
 validateGrammar :: Grammar -> IO Grammar
 validateGrammar grammar = do
-  when (isInvalidStartSymbol grammar) $ exitWithErrMsg (ExitFailure 1) invalidStartSymbol
+  when (missingStartSymbol grammar) $ exitWithErrMsg (ExitFailure 1) (invalidStartSymbol 0)
+  when (missingRuleWithStartSymbol grammar) $ exitWithErrMsg (ExitFailure 1) (invalidStartSymbol 1)
   when (invalidProductions /= []) $
     exitWithErrMsg (ExitFailure 1) (invalidProductionsErrMsg invalidProductionsTuple)
   return grammar
@@ -34,8 +35,12 @@ validateGrammar grammar = do
         invalidProductions
         invalidProductionsCodes
 
-isInvalidStartSymbol :: Grammar -> Bool
-isInvalidStartSymbol grammar = startSymbol' grammar `notElem` variables' grammar
+missingStartSymbol :: Grammar -> Bool
+missingStartSymbol grammar = startSymbol' grammar `notElem` variables' grammar
+
+missingRuleWithStartSymbol :: Grammar -> Bool
+missingRuleWithStartSymbol grammar =
+  not (any (\(x, _) -> x == startSymbol' grammar) (productions' grammar))
 
 filterProductions :: Grammar -> [(String, String)]
 filterProductions grammar =

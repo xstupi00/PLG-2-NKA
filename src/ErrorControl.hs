@@ -31,8 +31,12 @@ missingSymbols group
   | group 'a' = "Empty set of terminals on the line no. 2."
   | otherwise = "Empty set of productions on the line no. 4."
 
-invalidStartSymbol :: String
-invalidStartSymbol = errMsgGrammar ++ "The start symbol must be included between variables."
+invalidStartSymbol :: Int -> String
+invalidStartSymbol code
+  | code == 0 = errMsgGrammar ++ "The start symbol must be included between variables."
+  | code == 1 =
+    errMsgGrammar ++ "The start symbol must be included at least one in production on the left side."
+  | otherwise = errMsgGrammar
 
 exitWithErrMsg :: ExitCode -> String -> IO a
 exitWithErrMsg errCode errMsg = hPutStrLn stderr errMsg >> exitWith errCode
