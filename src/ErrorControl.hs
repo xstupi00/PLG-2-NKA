@@ -40,13 +40,21 @@ exitWithErrMsg errCode errMsg = hPutStrLn stderr errMsg >> exitWith errCode
 printWarning :: String -> IO ()
 printWarning = hPutStrLn stderr
 
-invalidProductionsErrMsg :: [(Int, (String, String))] -> String
+invalidProductionsErrMsg :: [(Int, (String, String), (Int, String))] -> String
 invalidProductionsErrMsg errTuples =
   baseErrMsg ++
   "   Invalid format of productions no.: " ++
-  show (map (\(x, (y, z)) -> show (x + 4) ++ ". line: " ++ y ++ "->" ++ z) errTuples)
+  show
+    (map
+       (\(x, (y, z), (c, vars)) -> show (x + 4) ++ ". line: " ++ y ++ "->" ++ z ++ errMsg c vars)
+       errTuples)
   where
     baseErrMsg = errMsgGrammar ++ productionsWrongFormat
+    errMsg code vars
+      | code == 0 = " (missing variable(s): " ++ vars ++ ")"
+      | code == 1 = " (missing variable(s): " ++ vars ++ ")"
+      | code == 2 = " (missing terminal(s): " ++ vars ++ ")"
+      | otherwise = " (no right linear grammar)"
 
 productionErrMsg :: [(Int, Int)] -> [(Int, String)] -> Int -> String
 productionErrMsg errIndices errTuples errCode

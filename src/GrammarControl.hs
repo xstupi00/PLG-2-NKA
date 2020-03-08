@@ -5,6 +5,7 @@ import Grammar
 import Helpers
 
 import Control.Monad
+import Data.Char
 import Data.List
 import System.Exit
 
@@ -26,8 +27,12 @@ validateGrammar grammar = do
   return grammar
   where
     invalidProductions = filterProductions grammar
+    invalidProductionsCodes = map (analyseInvalidProductions grammar) invalidProductions
     invalidProductionsTuple =
-      zip (findIndices (`elem` invalidProductions) (productions' grammar)) invalidProductions
+      zip3
+        (findIndices (`elem` invalidProductions) (productions' grammar))
+        invalidProductions
+        invalidProductionsCodes
 
 isInvalidStartSymbol :: Grammar -> Bool
 isInvalidStartSymbol grammar = startSymbol' grammar `notElem` variables' grammar
@@ -73,3 +78,15 @@ filterRightProductions products vars terms =
        l `elem` vars &&
        all (\ch -> [ch] `elem` terms) (fst $ splitAt (length r - 1) r) && [last r] `elem` vars)
     products
+
+analyseInvalidProductions :: Grammar -> (String, String) -> (Int, String)
+analyseInvalidProductions grammar (left, right)
+  | left `notElem` vars = (0, left)
+  | any (\ch -> [ch] `notElem` vars) (filter isAsciiUpper right) =
+    (1, filter (\ch -> [ch] `notElem` vars) (filter isAsciiUpper right))
+  | any (\ch -> [ch] `notElem` terms) (filter isAsciiLower right) =
+    (2, filter (\ch -> [ch] `notElem` terms) (filter isAsciiLower right))
+  | otherwise = (-1, "")
+  where
+    vars = variables' grammar
+    terms = terminals' grammar
