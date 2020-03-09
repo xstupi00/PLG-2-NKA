@@ -1,6 +1,6 @@
 module MainControl where
 
-import Grammar
+import DataStructures
 import GrammarControl
 import TransformGrammar
 
@@ -14,13 +14,30 @@ printGrammar grammar = do
   putStrLn $ intercalate "\n" $ sort $ map (\(l, r) -> l ++ "->" ++ r) (productions grammar)
   putStrLn "----------------------------------------------------------------------"
 
-transformGrammar :: Grammar -> IO ()
+printFiniteAutomata :: FiniteAutomata -> IO ()
+printFiniteAutomata finiteAutomata = do
+  putStrLn $ intercalate "," $ map show $ states finiteAutomata
+  print (startingState finiteAutomata)
+  putStrLn $ intercalate "," $ map show $ finalStates finiteAutomata
+  putStrLn $
+    intercalate "\n" $
+    sort $
+    map (\(x, y, z) -> show x ++ "," ++ y ++ "," ++ show z) (transitionFunction finiteAutomata)
+
+transformGrammar :: Grammar -> IO Grammar
 transformGrammar grammar = do
   let variablesCountInit = zip vars (replicate (length vars) 0)
-  let (variablesCountRight, rightProductions) = transformProductions True (filterRightProductions products vars terms) variablesCountInit
-  let (variablesCountTerminal, terminalProductions) = transformProductions False (filterTerminalProductions products vars terms) variablesCountRight
-  let finalProductions = epsilonProductions `union` basicProductions `union` rightProductions `union` terminalProductions
-  printGrammar
+  let (variablesCountRight, rightProductions) =
+        transformProductions True (filterRightProductions products vars terms) variablesCountInit
+  let (variablesCountTerminal, terminalProductions) =
+        transformProductions
+          False
+          (filterTerminalProductions products vars terms)
+          variablesCountRight
+  let finalProductions =
+        epsilonProductions `union` basicProductions `union` rightProductions `union`
+        terminalProductions
+  return
     Grammar
       { variables = nub $ map fst finalProductions
       , terminals = terminals grammar
@@ -33,3 +50,20 @@ transformGrammar grammar = do
     products = productions grammar
     vars = variables grammar
     terms = terminals grammar
+
+transformGrammarToNFA :: Grammar -> FiniteAutomata
+transformGrammarToNFA grammar =
+  FiniteAutomata
+    { states = [0 .. genericLength (variables grammar) - 1]
+    , startingState = getStateFromVariable $ startSymbol grammar
+    , finalStates = map getStateFromVariable getEpsilonVariables
+    , transitionFunction = map transformProduction getTransitionProductions
+    }
+  where
+    varsMapToStates = zip (variables grammar) [0 ..]
+    getStateFromVariable variable =
+      snd $ head $ filter (\(var, _) -> var == variable) varsMapToStates
+    getEpsilonVariables = map fst $ filter (\(_, r) -> r == "#") $ productions grammar
+    getTransitionProductions = filter (\(_, r) -> r /= "#") $ productions grammar
+    transformProduction (l_var, term:r_var) =
+      (getStateFromVariable l_var, [term], getStateFromVariable r_var)

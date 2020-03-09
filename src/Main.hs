@@ -1,6 +1,6 @@
 module Main where
 
-import Grammar
+import DataStructures
 import GrammarControl
 import MainControl
 import ParseArgs
@@ -13,4 +13,6 @@ main = do
   grammar <- parseInput $ head files
   validateGrammar grammar
   when (PLG `elem` args) $ printGrammar grammar
-  when (TLG `elem` args) $ transformGrammar grammar
+  transformedGrammar <- transformGrammar grammar
+  when (TLG `elem` args) $ printGrammar transformedGrammar
+  when (NKA `elem` args) $ printFiniteAutomata $ transformGrammarToNFA transformedGrammar

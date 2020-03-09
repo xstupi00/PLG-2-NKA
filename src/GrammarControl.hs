@@ -1,7 +1,7 @@
 module GrammarControl where
 
 import ErrorControl
-import Grammar
+import DataStructures
 import Helpers
 
 import Control.Monad
@@ -45,7 +45,7 @@ missingRuleWithStartSymbol grammar =
 filterProductions :: Grammar -> [(String, String)]
 filterProductions grammar =
   products \\
-  (epsilonProductions `union` basicProductions `union` terminalProductions `union` 
+  (epsilonProductions `union` basicProductions `union` terminalProductions `union`
   rightProductions `union` simpleProductions)
   where
     epsilonProductions = filterEpsilonProductions products vars terms
@@ -58,7 +58,7 @@ filterProductions grammar =
     terms = terminals grammar
 
 filterSimpleProductions :: (Foldable t, Eq a) => [([a], [a])] -> t [a] -> p -> [([a], [a])]
-filterSimpleProductions products vars terms = 
+filterSimpleProductions products vars terms =
   filter (\(l, r) -> l `elem` vars && length r == 1 && [head r] `elem` vars) products
 
 filterEpsilonProductions :: (Foldable t, Eq a) => [(a, String)] -> t a -> p -> [(a, String)]

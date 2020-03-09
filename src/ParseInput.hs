@@ -1,7 +1,7 @@
 module ParseInput where
 
 import ErrorControl
-import Grammar
+import DataStructures
 import GrammarControl
 import Helpers
 import ParseArgs
