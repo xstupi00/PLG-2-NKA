@@ -40,6 +40,12 @@ getInvalidLeftSides :: (Eq (t Char), Foldable t) => [t Char] -> [(Int, t Char)]
 getInvalidLeftSides vars = zip (findIndices (`elem` invalidLeftSides) vars) invalidLeftSides
   where
     invalidLeftSides = vars \\ filter (all isAsciiUpper) vars `union` filter (all isSpace) vars
+    
+getInvalidRightSides :: [String] -> [(Int, String)]
+getInvalidRightSides symbols =
+  map
+    (\idx -> (idx, (!!) symbols idx))
+    (elemIndices False (getValidatedRightSides symbols) `union` elemIndices "" symbols)
 
 getValidatedRightSides :: [String] -> [Bool]
 getValidatedRightSides = map (all isValidRightSide)
@@ -52,12 +58,6 @@ isAsciiAlpha ch = (||) (isAsciiUpper ch) (isAsciiLower ch)
 containsInvalidSymbols :: [String] -> Bool
 containsInvalidSymbols symbols =
   (||) (not $ all (== True) $ getValidatedRightSides symbols) ("" `elem` symbols)
-
-getInvalidRightSides :: [String] -> [(Int, String)]
-getInvalidRightSides symbols =
-  map
-    (\idx -> (idx, (!!) symbols idx))
-    (elemIndices False (getValidatedRightSides symbols) `union` elemIndices "" symbols)
 
 remove :: String -> String -> String
 remove w "" = ""

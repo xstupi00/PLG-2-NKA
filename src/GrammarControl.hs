@@ -24,6 +24,7 @@ import Data.Char
 import Data.List
 import System.Exit
 
+removeEpsilon :: [(a, [Char])] -> [(a, String)]
 removeEpsilon = map removeEpsilon'
   where
     removeEpsilon' production =

@@ -46,8 +46,10 @@ options =
   , Option [] ["help"] (NoArg Help) "Print this help message and exit"
   ]
 
+parseArgs :: IO ([Options], [String])
 parseArgs = getArgs >>= parse
 
+parse :: [String] -> IO ([Options], [String])
 parse argv =
   case getOpt Permute options argv of
     (args, fs, []) -> do

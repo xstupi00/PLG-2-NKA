@@ -15,14 +15,19 @@ the parsing of these arguments.
 -}
 module Main where
 
+import Control.Monad
+
+import ErrorControl
+import Helpers
+import TransformGrammar
+
 import DataStructures
 import GrammarControl
 import MainControl
 import ParseArgs
 import ParseInput
-import Control.Monad
 
-
+main :: IO ()
 main = do
   (args, files) <- parseArgs
   grammar <- parseInput $ head files
