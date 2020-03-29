@@ -1,3 +1,17 @@
+{-|
+Module      : DataStructures
+Description : Definition of data structures
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains definition of data structures to
+store the grammars and finite machine types.
+-}
 module DataStructures where
 
 import Helpers

@@ -1,3 +1,19 @@
+{-|
+Module      : TransformGrammar
+Description : Module to transform the grammar into the specified format
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains the functions to perform the 
+transformation of the right linear grammar into
+the specified format, from which then can be
+constructed the NFA.
+-}
 module TransformGrammar where
 
 import Data.Char

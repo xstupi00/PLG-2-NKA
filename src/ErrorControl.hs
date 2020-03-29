@@ -1,3 +1,19 @@
+{-|
+Module      : ErrorControl
+Description : Controller for occurrence of the error states.
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains error strings to write out when
+some error state was occurred and also it contains
+the auxiliary functions to construct the composed error
+strings in some aggregated situations.
+-}
 module ErrorControl where
 
 import Data.List
@@ -35,7 +51,8 @@ invalidStartSymbol :: Int -> String
 invalidStartSymbol code
   | code == 0 = errMsgGrammar ++ "The start symbol must be included between variables."
   | code == 1 =
-    errMsgGrammar ++ "The start symbol must be included at least one in production on the left side."
+    errMsgGrammar ++
+    "The start symbol must be included at least one in production on the left side."
   | otherwise = errMsgGrammar
 
 exitWithErrMsg :: ExitCode -> String -> IO a

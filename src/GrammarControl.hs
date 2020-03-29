@@ -1,7 +1,22 @@
+{-|
+Module      : GrammarControl
+Description : Controller for the processing of grammar.
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains the functions to validate the grammar,
+functions to processing of grammar productions, respectively
+to filter the productions of the specific type.
+-}
 module GrammarControl where
 
-import ErrorControl
 import DataStructures
+import ErrorControl
 import Helpers
 
 import Control.Monad
@@ -45,8 +60,8 @@ missingRuleWithStartSymbol grammar =
 filterProductions :: Grammar -> [(String, String)]
 filterProductions grammar =
   products \\
-  (epsilonProductions `union` basicProductions `union` terminalProductions `union`
-  rightProductions `union` simpleProductions)
+  (epsilonProductions `union` basicProductions `union` terminalProductions `union` rightProductions `union`
+   simpleProductions)
   where
     epsilonProductions = filterEpsilonProductions products vars terms
     basicProductions = filterBasicProductions products vars terms
@@ -86,7 +101,8 @@ filterRightProductions ::
 filterRightProductions products vars terms =
   filter
     (\(l, r) ->
-       l `elem` vars && length r > 2 &&
+       l `elem` vars &&
+       length r > 2 &&
        all (\ch -> [ch] `elem` terms) (fst $ splitAt (length r - 1) r) && [last r] `elem` vars)
     products
 

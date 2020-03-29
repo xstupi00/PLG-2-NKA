@@ -1,10 +1,24 @@
+{-|
+Module      : Helpers
+Description : Helpers function for general purpose
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains helper functions for general purpose
+and their use within different modules.
+-}
 module Helpers where
 
 import Data.Char
+import Data.Foldable (Foldable)
 import Data.Function
 import Data.List
 import Data.Maybe
-import Data.Foldable (Foldable)
 
 strip :: String -> String
 strip = dropWhile isSpace . reverse . dropWhile isSpace . reverse
@@ -44,9 +58,9 @@ getInvalidRightSides symbols =
   map
     (\idx -> (idx, (!!) symbols idx))
     (elemIndices False (getValidatedRightSides symbols) `union` elemIndices "" symbols)
-    
+
 remove :: String -> String -> String
 remove w "" = ""
-remove w s@(c:cs) 
+remove w s@(c:cs)
   | w `isPrefixOf` s = remove w (drop (length w) s)
   | otherwise = c : remove w cs

@@ -1,3 +1,18 @@
+{-|
+Module      : Main
+Description : Main module of the whole project
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+The main module that gradually runs the required
+actions according to the given arguments, including
+the parsing of these arguments.
+-}
 module Main where
 
 import DataStructures

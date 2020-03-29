@@ -1,3 +1,18 @@
+{-|
+Module      : ParseInput
+Description : Module for the processing of the input file
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains the functions to load and validate
+the input file with the right linear grammar in the
+specified format.
+-}
 module ParseInput where
 
 import ErrorControl

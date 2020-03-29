@@ -1,3 +1,20 @@
+{-|
+Module      : MainControl
+Description : Controller of the main functionality of the project
+Copyright   : (c) Simon Stupinsky, 2020
+License     : GPL-3
+Maintainer  : xstupi00@stud.fit.vutbr.cz
+Project     : Functional project - plg-2-nka
+Course      : Functional and Logic Programming (FLP)
+University  : University of Technology Brno (BUT)
+Faculty     : Faculty of Information Technology (FIT)
+
+This module contains the function to run the main
+functionality of the project. Specifically, it
+contains the functions to print grammar and finite
+machine and functions to transform grammar into
+internal form and to the finite machine.
+-}
 module MainControl where
 
 import DataStructures
