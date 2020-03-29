@@ -4,6 +4,28 @@ import Data.Char
 import Data.List
 import Data.Maybe
 
+
+transformSimpleProductions :: [(String, String)] -> [(String, String)] -> [(String, String)]
+transformSimpleProductions simple_productions productions =
+  concatMap
+    (\(var, vars) -> zip (replicate (length $ rightSides vars) var) (rightSides vars))
+    simpleSetOfVariables
+  where
+    variables = nub $ map fst simple_productions
+    simpleSetOfVariables = map (\var -> (var, getSimpleSet [var] simple_productions)) variables
+    rightSides variable = getRightSides variable productions
+
+getRightSides :: [String] -> [(String, String)] -> [String]
+getRightSides [] _ = []
+getRightSides (var:vars) productions = filterRightSides ++ getRightSides vars productions
+  where filterRightSides = map snd $ filter (\(l, r) -> l == var) productions
+
+getSimpleSet :: [String] -> [(String, String)] -> [String]
+getSimpleSet [] _ = []
+getSimpleSet (variable:variables) productions =
+  getSimpleDerivations ++ getSimpleSet (getSimpleDerivations++variables) productions
+  where getSimpleDerivations = map snd $ filter (\(l, r) -> l == variable) productions
+
 transformProductions ::
      Bool -> [(String, String)] -> [(String, Int)] -> ([(String, Int)], [(String, String)])
 transformProductions _ [] varCounts = (varCounts, [])

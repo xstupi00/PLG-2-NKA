@@ -34,9 +34,12 @@ transformGrammar grammar = do
           False
           (filterTerminalProductions products vars terms)
           variablesCountRight
-  let finalProductions =
+  let newProductions =
         epsilonProductions `union` basicProductions `union` rightProductions `union`
         terminalProductions
+  let transformedSimpleProductions = transformSimpleProductions simpleProductions newProductions
+  print transformedSimpleProductions
+  let finalProductions = newProductions `union` transformedSimpleProductions
   return
     Grammar
       { variables = nub $ map fst finalProductions
@@ -47,6 +50,7 @@ transformGrammar grammar = do
   where
     epsilonProductions = filterEpsilonProductions products vars terms
     basicProductions = filterBasicProductions products vars terms
+    simpleProductions = filterSimpleProductions products vars terms
     products = productions grammar
     vars = variables grammar
     terms = terminals grammar
