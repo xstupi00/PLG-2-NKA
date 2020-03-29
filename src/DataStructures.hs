@@ -27,8 +27,8 @@ data Grammar =
     }
   deriving (Show)
 
-data FiniteAutomata =
-  FiniteAutomata -- A = (Q, q0, F, delta)
+data FiniteAutomaton =
+  FiniteAutomaton -- A = (Q, q0, F, delta)
     { states :: [Integer] -- Q
     , startingState :: Integer -- q0
     , finalStates :: [Integer] -- F

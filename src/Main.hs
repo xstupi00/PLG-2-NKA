@@ -35,4 +35,4 @@ main = do
   when (PLG `elem` args) $ printGrammar grammar
   transformedGrammar <- transformGrammar grammar
   when (TLG `elem` args) $ printGrammar transformedGrammar
-  when (NKA `elem` args) $ printFiniteAutomata $ transformGrammarToNFA transformedGrammar
+  when (NKA `elem` args) $ printFiniteAutomaton $ transformGrammarToNFA transformedGrammar

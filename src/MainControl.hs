@@ -31,15 +31,15 @@ printGrammar grammar = do
   putStrLn $ intercalate "\n" $ sort $ map (\(l, r) -> l ++ "->" ++ r) (productions grammar)
   putStrLn "----------------------------------------------------------------------"
 
-printFiniteAutomata :: FiniteAutomata -> IO ()
-printFiniteAutomata finiteAutomata = do
-  putStrLn $ intercalate "," $ map show $ states finiteAutomata
-  print (startingState finiteAutomata)
-  putStrLn $ intercalate "," $ map show $ finalStates finiteAutomata
+printFiniteAutomaton :: FiniteAutomaton -> IO ()
+printFiniteAutomaton finiteAutomaton = do
+  putStrLn $ intercalate "," $ map show $ states finiteAutomaton
+  print (startingState finiteAutomaton)
+  putStrLn $ intercalate "," $ map show $ finalStates finiteAutomaton
   putStrLn $
     intercalate "\n" $
     sort $
-    map (\(x, y, z) -> show x ++ "," ++ y ++ "," ++ show z) (transitionFunction finiteAutomata)
+    map (\(x, y, z) -> show x ++ "," ++ y ++ "," ++ show z) (transitionFunction finiteAutomaton)
 
 transformGrammar :: Grammar -> IO Grammar
 transformGrammar grammar = do
@@ -72,9 +72,9 @@ transformGrammar grammar = do
     vars = variables grammar
     terms = terminals grammar
 
-transformGrammarToNFA :: Grammar -> FiniteAutomata
+transformGrammarToNFA :: Grammar -> FiniteAutomaton
 transformGrammarToNFA grammar =
-  FiniteAutomata
+  FiniteAutomaton
     { states = [0 .. genericLength (variables grammar) - 1]
     , startingState = getStateFromVariable $ startSymbol grammar
     , finalStates = map getStateFromVariable getEpsilonVariables
