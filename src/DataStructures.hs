@@ -14,23 +14,21 @@ store the grammars and finite machine types.
 -}
 module DataStructures where
 
-import Helpers
-
-import Data.List
-
+-- ^ Data structure to represent the grammar
 data Grammar =
-  Grammar -- G = (V, T, S, P)
-    { variables :: [String] -- V
-    , terminals :: [String] -- T
-    , startSymbol :: String -- S
-    , productions :: [(String, String)] -- P
+  Grammar -- ^ G = (V, T, S, P)
+    { variables :: [String] -- ^ V 
+    , terminals :: [String] -- ^ T
+    , startSymbol :: String -- ^ S
+    , productions :: [(String, String)] -- ^ P
     }
   deriving (Show)
 
+-- ^ Data structure to represent finite automaton
 data FiniteAutomaton =
-  FiniteAutomaton -- A = (Q, q0, F, delta)
-    { states :: [Integer] -- Q
-    , startingState :: Integer -- q0
-    , finalStates :: [Integer] -- F
-    , transitionFunction :: [(Integer, String, Integer)]
+  FiniteAutomaton -- ^ A = (Q, q0, F, delta) + sigma (input alphabet)
+    { states :: [Integer] -- ^ Q
+    , startingState :: Integer -- ^ q0
+    , finalStates :: [Integer] -- ^ F
+    , transitionFunction :: [(Integer, String, Integer)] -- ^ delta : Q x sigma -> Q
     }

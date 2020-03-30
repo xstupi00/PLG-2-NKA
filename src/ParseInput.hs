@@ -35,8 +35,10 @@ parseInput file = do
   when (null (lines grammar)) $ exitWithErrMsg (ExitFailure 1) missingContent
   variables <-
     validateSymbols isAsciiUpper $ filter (/= "") $ map strip $ splitBy ',' $ head $ lines grammar
+  when ((==) 1 (length (lines grammar))) $ exitWithErrMsg (ExitFailure 1) (missingSymbols isAsciiLower)
   terminals <-
     validateSymbols isAsciiLower $ filter (/= "") $ map strip $ splitBy ',' $ (!! 1) $ lines grammar
+  when ((==) 2 (length (lines grammar))) $ exitWithErrMsg (ExitFailure 1) (invalidStartSymbol 2)
   startSymbol <- validateSymbols isAsciiUpper [strip ((!! 2) $ lines grammar)]
   productions <- validateProductions $ filter (/= "") $ map strip $ drop 3 $ lines grammar
   return
