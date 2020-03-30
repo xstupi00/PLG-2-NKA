@@ -24,7 +24,7 @@ import Data.Char
 import Data.List
 import System.Exit
 
-removeEpsilon :: [(a, [Char])] -> [(a, String)]
+removeEpsilon :: [(a, String)] -> [(a, String)]
 removeEpsilon = map removeEpsilon'
   where
     removeEpsilon' production =
@@ -73,32 +73,25 @@ filterProductions grammar =
     vars = variables grammar
     terms = terminals grammar
 
-filterSimpleProductions :: (Foldable t, Eq a) => [([a], [a])] -> t [a] -> p -> [([a], [a])]
+filterSimpleProductions :: Eq t1 => [([t1], [t1])] -> [[t1]] -> t -> [([t1], [t1])]
 filterSimpleProductions products vars terms =
   filter (\(l, r) -> l `elem` vars && length r == 1 && [head r] `elem` vars) products
 
-filterEpsilonProductions :: (Foldable t, Eq a) => [(a, String)] -> t a -> p -> [(a, String)]
+filterEpsilonProductions :: Eq a => [(a, String)] -> [a] -> t -> [(a, String)]
 filterEpsilonProductions products vars terms =
   filter (\(l, r) -> l `elem` vars && length r == 1 && head r == '#') products
 
-filterBasicProductions ::
-     (Eq a, Foldable t1, Foldable t2) => [([a], [a])] -> t1 [a] -> t2 [a] -> [([a], [a])]
+filterBasicProductions :: Eq t => [([t], [t])] -> [[t]] -> [[t]] -> [([t], [t])]
 filterBasicProductions products vars terms =
   filter
     (\(l, r) -> l `elem` vars && length r == 2 && [head r] `elem` terms && [last r] `elem` vars)
     products
 
-filterTerminalProductions ::
-     (Foldable t1, Foldable t2, Foldable t3, Eq a1, Eq a2)
-  => [(a1, t2 a2)]
-  -> t1 a1
-  -> t3 [a2]
-  -> [(a1, t2 a2)]
+filterTerminalProductions :: (Eq a, Eq t) => [(a, [t])] -> [a] -> [[t]] -> [(a, [t])]
 filterTerminalProductions products vars terms =
   filter (\(l, r) -> l `elem` vars && all (\ch -> [ch] `elem` terms) r) products
 
-filterRightProductions ::
-     (Eq a, Foldable t1, Foldable t2) => [([a], [a])] -> t1 [a] -> t2 [a] -> [([a], [a])]
+filterRightProductions :: Eq t => [([t], [t])] -> [[t]] -> [[t]] -> [([t], [t])]
 filterRightProductions products vars terms =
   filter
     (\(l, r) ->

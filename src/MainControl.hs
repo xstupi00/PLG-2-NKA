@@ -29,7 +29,6 @@ printGrammar grammar = do
   putStrLn $ intercalate "," $ sort $ terminals grammar
   putStrLn $ startSymbol grammar
   putStrLn $ intercalate "\n" $ sort $ map (\(l, r) -> l ++ "->" ++ r) (productions grammar)
-  putStrLn "----------------------------------------------------------------------"
 
 printFiniteAutomaton :: FiniteAutomaton -> IO ()
 printFiniteAutomaton finiteAutomaton = do
@@ -55,7 +54,6 @@ transformGrammar grammar = do
         epsilonProductions `union` basicProductions `union` rightProductions `union`
         terminalProductions
   let transformedSimpleProductions = transformSimpleProductions simpleProductions newProductions
-  print transformedSimpleProductions
   let finalProductions = newProductions `union` transformedSimpleProductions
   return
     Grammar

@@ -36,7 +36,7 @@ splitBy ch = filter (notElem ch) . groupBy ((==) `on` (== ch))
 findString :: (Eq a) => [a] -> [a] -> Int
 findString search str = fromMaybe (-1) $ findIndex (isPrefixOf search) (tails str)
 
-getInvalidLeftSides :: (Eq (t Char), Foldable t) => [t Char] -> [(Int, t Char)]
+getInvalidLeftSides :: [String] -> [(Int, String)]
 getInvalidLeftSides vars = zip (findIndices (`elem` invalidLeftSides) vars) invalidLeftSides
   where
     invalidLeftSides = vars \\ filter (all isAsciiUpper) vars `union` filter (all isSpace) vars
