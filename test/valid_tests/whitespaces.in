@@ -2,6 +2,6 @@ A,      B,      D
 a       ,       b,          c,
                 A
 A               ->             aaB
-            B->         bcD
+            B      ->         bcD
 D->abc
-A -> acB
+A           -> acB

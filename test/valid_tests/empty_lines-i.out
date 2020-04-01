@@ -1,12 +1,6 @@
-A,B,C,A
+A,B,C
 a
 A
-
 A->B
-
-
 B->aaaC
-
-
 C->aa
-A->B
