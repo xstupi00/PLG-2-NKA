@@ -133,7 +133,7 @@ productionErrMsg errIndices errTuples errCode
   where
     baseErrMsg = errMsgGrammar ++ productionsWrongFormat -- ^ generic error message
 
--- ^
+-- ^ construct the error message at invalid symbols
 symbolErrMsg :: (Show a1, Show a2) => Bool -> [(String, a2)] -> a1 -> (Char -> Bool) -> String
 symbolErrMsg isRange multipleSymbols wrongSymbols symbolGroup =
   errMsgGrammar ++

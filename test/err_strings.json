@@ -16,5 +16,6 @@
     "missing_term_in_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of productions no.: [\"4. line: A->bA (missing terminal(s): b)\"]\n",
     "invalid_arrow": "Wrong format of input grammar:\n Productions have not required format:\n   Missing or badly located arrows in productions no.: [\"4. line: 0. column\"]\n",
     "invalid_left_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Left side of productions must be character in the range [A-Z]: [\"4. line: a\"]\n",
-    "invalid_right_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of right side in productions no.: [\"4. line: ?\"]\n"
+    "invalid_right_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of right side in productions no.: [\"4. line: ?\"]\n",
+    "whitespaces_right_side": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of right side in productions no.: [\"4. line: a a a\"]\n"
 }

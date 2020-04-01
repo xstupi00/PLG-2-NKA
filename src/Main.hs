@@ -27,12 +27,20 @@ import MainControl
 import ParseArgs
 import ParseInput
 
+-- ^ main function of the whole program plg-2-nka
 main :: IO ()
 main = do
+  -- ^ parse arguments from the command line
   (args, files) <- parseArgs
+  -- ^ parse grammar from the given input file 
   grammar <- parseInput $ head files
+  -- ^ check correctness of the loaded grammar
   validateGrammar grammar
+  -- ^ option -i -> write out the loaded grammar from the internal representation
   when (PLG `elem` args) $ printGrammar grammar
-  transformedGrammar <- transformGrammar grammar
+  -- ^ construct the transformed grammar according to the given specification
+  transformedGrammar <- transformGrammar' grammar
+  -- ^ option -1 -> write out the transformed grammar from the internal representation 
   when (TLG `elem` args) $ printGrammar transformedGrammar
+  -- ^ option -2 -> write out the constructed NFA with the same language as loaded grammar
   when (NKA `elem` args) $ printFiniteAutomaton $ transformGrammarToNFA transformedGrammar

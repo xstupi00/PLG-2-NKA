@@ -2,4 +2,6 @@ A,B,C
 a
 A
 A->B
-B->aaaB
+B->C
+C->A
+C->a
