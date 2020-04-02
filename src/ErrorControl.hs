@@ -25,6 +25,9 @@ missingContent = "Missing content of given input."
 errMsgGrammar :: String -- ^ error string
 errMsgGrammar = "Wrong format of input grammar:\n "
 
+errMsgGrammar' :: String -- ^ error string
+errMsgGrammar' = "Potential invalid format of input grammar:\n "
+
 varErrMsgRange :: String -- ^ error string
 varErrMsgRange = "Variables must be character in the range [A-Z]: "
 
@@ -61,8 +64,8 @@ invalidStartSymbol code
   | code == 0 = errMsgGrammar ++ "The start symbol must be included between variables."
   -- | given start symbol is not included in some production on the right side
   | code == 1 =
-    errMsgGrammar ++
-    "The start symbol must be included at least one in production on the left side."
+    errMsgGrammar' ++
+    "The start symbol should be included at least one in production on the left side."
   -- | missing start symbol
   | code == 2 = errMsgGrammar ++ "Missing start symbol at the line no. 4."
   -- | generic error due to total function

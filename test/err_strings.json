@@ -7,7 +7,6 @@
     "invalid_terms":
         "Wrong format of input grammar:\n Terminals must be character in the range [a-z]: [\"A\"]\n",
     "missing_start_symbol": "Wrong format of input grammar:\n Missing start symbol at the line no. 4.\n",
-    "empty_productions": "Empty set of productions on the line no. 4.\n",
     "invalid_start_symbol": "Wrong format of input grammar:\n The start symbol must be included between variables.\n",
     "missing_ss_in_products":
         "Wrong format of input grammar:\n The start symbol must be included at least one in production on the left side.\n",

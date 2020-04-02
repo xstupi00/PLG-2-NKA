@@ -78,8 +78,9 @@ validateSymbols symbolGroup symbols
   when
     (containsInvalidSymbol symbolGroup symbols || isNotGrammarSymbol symbols)
     (exitWithErrMsg (ExitFailure 1) $ symbolErrMsg True symbolTuples wrongSymbols symbolGroup)
-  -- ^ check whether the given list is not empty
-  when (null $ nub symbols) $ exitWithErrMsg (ExitFailure 1) (missingSymbols symbolGroup)
+  --  check whether the given list is not empty when are the validate variables
+  when ((&&) (null $ nub symbols) (symbolGroup 'A')) $
+    exitWithErrMsg (ExitFailure 1) (missingSymbols symbolGroup)
   -- ^ return the validated symbols
   return $ nub symbols
   where
@@ -112,16 +113,16 @@ validateProductions productions
     (exitWithErrMsg
        (ExitFailure 1)
        (productionErrMsg invalidLeftSides (getInvalidRightSides rightSide') 2))
-  -- ^ check whether the final set of productions is not empty
-  when (null $ zip leftSide rightSide') $ exitWithErrMsg (ExitFailure 1) (missingSymbols isSpace)
+  -- check whether the final set of productions is not empty
+  --  when (null $ zip leftSide rightSide') $ exitWithErrMsg (ExitFailure 1) (missingSymbols isSpace)
   -- ^ return the validate set of productions
-  return $ zip leftSide rightSide'
+  return $ nub $ zip leftSide rightSide'
   where
     splittedProductions = map (span (/= '-') . strip) productions -- ^ strip production to L and ->R
     leftSide = map (strip . fst) splittedProductions -- ^ L from L->R
     rightSide = map (strip . snd) splittedProductions -- ^ R from L->R
     arrowIndices = map (findString "->") rightSide -- ^ location of the arrow in the production
-    -- ^ order number of productionc that have the invalid arrows
+    -- ^ order number of productions that have the invalid arrows
     errArrowIndices = [0 .. genericLength productions - 1] \\ elemIndices 0 arrowIndices
     -- ^ package the invalid left sides od productions
     invalidLeftSides = zip errArrowIndices (filter (/= 0) arrowIndices)
