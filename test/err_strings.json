@@ -8,8 +8,6 @@
         "Wrong format of input grammar:\n Terminals must be character in the range [a-z]: [\"A\"]\n",
     "missing_start_symbol": "Wrong format of input grammar:\n Missing start symbol at the line no. 4.\n",
     "invalid_start_symbol": "Wrong format of input grammar:\n The start symbol must be included between variables.\n",
-    "missing_ss_in_products":
-        "Wrong format of input grammar:\n The start symbol must be included at least one in production on the left side.\n",
     "no_right_production": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of productions no.: [\"4. line: A->aAa (no right linear grammar)\"]\n",
     "missing_var_in_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of productions no.: [\"4. line: A->aB (missing variable(s): B)\"]\n",
     "missing_term_in_prod": "Wrong format of input grammar:\n Productions have not required format:\n   Invalid format of productions no.: [\"4. line: A->bA (missing terminal(s): b)\"]\n",

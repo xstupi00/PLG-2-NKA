@@ -45,11 +45,11 @@ printFiniteAutomaton ::
 printFiniteAutomaton finiteAutomaton
   -- ^ states separated by a comma - 0,1,2,3
  = do
-  putStrLn $ intercalate "," $ map show $ states finiteAutomaton
+  putStrLn $ intercalate "," $ sort $ map show $ states finiteAutomaton
   -- ^ write out the starting state
   print (startingState finiteAutomaton)
   -- ^ final states separated by a comma - 2,3
-  putStrLn $ intercalate "," $ map show $ finalStates finiteAutomaton
+  putStrLn $ intercalate "," $ sort $ map show $ finalStates finiteAutomaton
   -- ^ transition function at the separated line in the form - 0,a,1
   putStrLn $
     intercalate "\n" $
