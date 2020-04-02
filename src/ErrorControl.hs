@@ -43,6 +43,9 @@ termErrMsgOccur = "Terminals should not be entered twice in the input list: "
 productionsWrongFormat :: String -- ^ error string
 productionsWrongFormat = "Productions have not required format:\n"
 
+emptyLanguageOfGrammar :: String -- ^ error string
+emptyLanguageOfGrammar = "WARNING: The given grammar generates empty language!"
+
 -- ^ Return the relevant error string according to given classification function
 missingSymbols ::
      (Char -> Bool) -- ^ character classification function (isAsciiLower, isAsciiUpper, isSpace)
@@ -64,7 +67,6 @@ invalidStartSymbol code
   | code == 0 = errMsgGrammar ++ "The start symbol must be included between variables."
   -- | given start symbol is not included in some production on the right side
   | code == 1 =
-    errMsgGrammar' ++
     "The start symbol should be included at least one in production on the left side."
   -- | missing start symbol
   | code == 2 = errMsgGrammar ++ "Missing start symbol at the line no. 4."

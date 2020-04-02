@@ -48,7 +48,7 @@ validateGrammar grammar
   -- | check whether the start symbol was correctly entered
  = do
   when (missingStartSymbol grammar) $ exitWithErrMsg (ExitFailure 1) (invalidStartSymbol 0)
-  -- | check whether was entered the production with the start symbol on right side
+  -- check whether was entered the production with the start symbol on right side
   when (missingRuleWithStartSymbol grammar) $ printWarning (invalidStartSymbol 1)
   -- | check whether the all productions has invalid format according to specification
   when (invalidProductions /= []) $

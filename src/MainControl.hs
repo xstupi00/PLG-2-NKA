@@ -18,10 +18,12 @@ internal form and to the finite machine.
 module MainControl where
 
 import DataStructures
+import ErrorControl
 import GrammarControl
 import TransformGrammar
 
 import Data.List
+import Control.Monad (when)
 
 -- ^ write out the grammar data structure according to required format on the STDOUT
 printGrammar ::
@@ -58,18 +60,9 @@ printFiniteAutomaton finiteAutomaton
 
 -- ^ check whether the grammar not generate the empty language and then transform it
 transformGrammar :: Grammar -> IO Grammar
-transformGrammar grammar
-  -- ^ when the grammar generates empty language then we return the trivial language
-  | isLanguageOfGrammarEmpty grammar =
-    return
-      Grammar
-        { variables = [startSymbol'] -- ^ S from G, only needed variable
-        , terminals = [] -- ^ empty language -> no needed terminals
-        , startSymbol = startSymbol' -- ^ S from G, remains unchanged
-        , productions = [(startSymbol', startSymbol')] -- ^ S->S (empty language of new G)
-        }
-  -- ^ when the language is non-empty then run the process of transformation
-  | otherwise = transformGrammar' grammar
+transformGrammar grammar = do
+  when (isLanguageOfGrammarEmpty grammar) $ printWarning emptyLanguageOfGrammar
+  transformGrammar' grammar
   where
     startSymbol' = startSymbol grammar -- ^ S from G
 

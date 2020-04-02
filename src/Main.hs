@@ -39,7 +39,7 @@ main = do
   -- ^ option -i -> write out the loaded grammar from the internal representation
   when (PLG `elem` args) $ printGrammar grammar
   -- ^ construct the transformed grammar according to the given specification
-  transformedGrammar <- transformGrammar' grammar
+  transformedGrammar <- transformGrammar grammar
   -- ^ option -1 -> write out the transformed grammar from the internal representation 
   when (TLG `elem` args) $ printGrammar transformedGrammar
   -- ^ option -2 -> write out the constructed NFA with the same language as loaded grammar
