@@ -85,8 +85,8 @@ filterProductions ::
   -> [(String, String)] -- ^ the list of filtered productions
 filterProductions grammar =
   products \\
-  (epsilonProductions `union` basicProductions `union` terminalProductions `union` rightProductions `union`
-   simpleProductions)
+  (epsilonProductions `union` basicProductions `union` terminalProductions `union` 
+  rightProductions `union` simpleProductions)
   where
     epsilonProductions = filterEpsilonProductions products vars -- ^ A-># from P
     basicProductions = filterBasicProductions products vars terms -- ^ A->aB from P

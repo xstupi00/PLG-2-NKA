@@ -114,7 +114,7 @@ validateProductions productions
        (ExitFailure 1)
        (productionErrMsg invalidLeftSides (getInvalidRightSides rightSide') 2))
   -- check whether the final set of productions is not empty
-  --  when (null $ zip leftSide rightSide') $ exitWithErrMsg (ExitFailure 1) (missingSymbols isSpace)
+  -- when (null $ zip leftSide rightSide') $ exitWithErrMsg (ExitFailure 1) (missingSymbols isSpace)
   -- ^ return the validate set of productions
   return $ nub $ zip leftSide rightSide'
   where

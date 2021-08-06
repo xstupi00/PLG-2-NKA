@@ -108,7 +108,7 @@ possible option. Thus, one test suite includes the 4 files: input file
 situations that can be experienced in the input grammars. To run the
 python [script][16] you can use the following command:
 ```
- python3 test/test.py 2> /dev/null
+ make && python3 test/test.py 2> /dev/null
 ```
 
 The output will be contained the resulting summaries from both testing
